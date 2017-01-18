@@ -5,7 +5,7 @@ import pygame
 def run_game():
     """ Инициализирует игру и создаёт объект экрана"""
     pygame.init()
-    screen = pygame.display.set_mode((1200, 800))
+    screen = pygame.display.set_mode((1000, 720))
 
     while True:
         for event in pygame.event.get():
