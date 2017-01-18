@@ -6,6 +6,7 @@ def run_game():
     """ Инициализирует игру и создаёт объект экрана"""
     pygame.init()
     screen = pygame.display.set_mode((1000, 720))
+    pygame.display.set_caption("Alien Invasion")
 
     while True:
         for event in pygame.event.get():
