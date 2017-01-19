@@ -1,3 +1,4 @@
+# coding=utf-8
 """alien invasion main module"""
 import sys
 import pygame
@@ -6,7 +7,7 @@ from ship import Ship
 import game_functions as gf
 
 def run_game():
-    """ Инициализирует игру и создаёт объект экрана"""
+    """Initialise game,  create screen object, and start main loop"""
     pygame.init()
     ai_settings = Settings()
     screen = pygame.display.set_mode((ai_settings.screen_width,

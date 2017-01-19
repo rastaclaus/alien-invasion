@@ -1,10 +1,11 @@
+# coding=utf-8
 """Player ship module"""
 import pygame
 
 class Ship():
     """Player ship class"""
     def __init__(self, screen):
-        """Инициализирует корабль игрока и задаёт его начальную позицию"""
+        """Init player ship and his position"""
         self.screen = screen
 
         self.image = pygame.image.load('images/ship.png')
