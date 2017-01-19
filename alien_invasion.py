@@ -1,4 +1,6 @@
+#!/usr/bin/env python
 # coding=utf-8
+
 """alien invasion main module"""
 import sys
 import pygame
