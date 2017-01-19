@@ -10,15 +10,21 @@ def check_events(ship):
         if event.type == pygame.QUIT:
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                ship.moving_right = 1
-            if event.key == pygame.K_LEFT:
-                ship.moving_left = 1
+            check_keydown_events(event, ship)
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_RIGHT:
-                ship.moving_right = 0
-            if event.key == pygame.K_LEFT:
-                ship.moving_left = 0
+            check_keyup_events(event, ship)
+
+def check_keydown_events(event, ship):
+    if event.key == pygame.K_RIGHT:
+        ship.moving_right = 1
+    if event.key == pygame.K_LEFT:
+        ship.moving_left = 1
+
+def check_keyup_events(event, ship):
+    if event.key == pygame.K_RIGHT:
+        ship.moving_right = 0
+    if event.key == pygame.K_LEFT:
+        ship.moving_left = 0
 
 def update_screen(ai_settings, screen, ship):
     """Refresh and draw screen"""
