@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import pygame
-from pygame import Sprite
+from pygame.sprite import Sprite
 
 class Bullet(Sprite):
     """Class for a bullet, by player ship launched"""

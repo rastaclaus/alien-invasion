@@ -4,6 +4,7 @@
 """alien invasion main module"""
 import sys
 import pygame
+from pygame.sprite import Group
 from settings import Settings
 from ship import Ship
 import game_functions as gf
@@ -19,9 +20,11 @@ def run_game():
     pygame.display.set_caption("Alien Invasion")
 
     ship = Ship(ai_settings, screen)
+    bullets = Group()
     while True:
-        gf.check_events(ship)
+        gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
-        gf.update_screen(ai_settings, screen, ship)
+        bullets.update()
+        gf.update_screen(ai_settings, screen, ship, bullets)
 
 run_game()
