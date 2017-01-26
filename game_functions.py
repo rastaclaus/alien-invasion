@@ -52,15 +52,22 @@ def fire_bullet(ai_settings, screen, ship, bullets):
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
 
-def create_fleet(ai_settings, screen, aliens):
-    alien = Alien(ai_settings, screen)
-    alien_width = alien.rect.width
+def get_number_aliens_x(ai_settings, alien_width):
+    """compute aliens number in a one row"""
     available_space_x = ai_settings.screen_width - alien_width
     number_aliens_x = int(available_space_x / (1.5 * alien_width))
+    return number_aliens_x
 
+def create_alien(ai_settings, screen, aliens, alien_number):
+    """create alien and place him in a row"""
+    alien = Alien(ai_settings, screen)
+    alien_width = alien.rect.width
+    alien.x = 0.5 * alien_width + 1.5 * alien_width * alien_number
+    alien.rect.x = alien.x
+    aliens.add(alien)
+
+def create_fleet(ai_settings, screen, aliens):
+    alien = Alien(ai_settings, screen)
+    number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)
     for alien_number in range(number_aliens_x):
-        print(alien_number)
-        alien = Alien(ai_settings, screen)
-        alien.x = 0.5 * alien_width + 1.5 * alien_width * alien_number
-        alien.rect.x = alien.x
-        aliens.add(alien)
+        create_alien(ai_settings, screen, aliens, alien_number)
