@@ -8,7 +8,7 @@ class Settings:
         """Init game settings"""
         self.screen_width = 1000
         self.screen_height = 720
-        self.bg_color = (230, 230, 230)
+        self.bg_color = (130, 130, 255)
         self.ship_speed_factor = 1.5
         # Settings for bullet
         self.bullet_speed_factor = 1
