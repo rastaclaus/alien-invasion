@@ -97,3 +97,6 @@ def create_stars(ai_settings, screen, stars):
                 randint(0, ai_settings.screen_height))
         star = Star(coords, screen)
         stars.append(star)
+
+def update_aliens(aliens):
+    aliens.update()
