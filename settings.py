@@ -8,17 +8,16 @@ class Settings:
         """Init game settings"""
         self.screen_width = 1000
         self.screen_height = 720
-        self.bg_color = (130, 130, 255)
+        self.bg_color = (20, 20, 100)
         self.ship_speed_factor = 1.5
         # Settings for bullet
         self.bullet_speed_factor = 1
         self.bullet_width = 3
         self.bullet_height = 15
-        self.bullet_color = 60, 60, 60
+        self.bullet_color = 130, 190, 190
         self.bullets_allowed = 3
         # Settings for aliens
-        self.alien_speed_factor = 1
-        self.fleet_drop_speed = 10
+        self.alien_speed_factor = 0.5
+        self.fleet_drop_speed = 20
         # fleet_direction = 1 - move right, -1 move left
         self.fleet_direction = 1
-

@@ -4,6 +4,7 @@
 import pygame
 from pygame.sprite import Sprite
 
+
 class Alien(Sprite):
     """class represent alien ship instance"""
     def __init__(self, ai_settings, screen):
@@ -19,9 +20,10 @@ class Alien(Sprite):
 
     def update(self):
         """move alien"""
-        self.x += (self.ai_settings.alien_speed_factor * 
-                self.ai_settings.fleet_direction)
+        self.x += (self.ai_settings.alien_speed_factor *
+                   self.ai_settings.fleet_direction)
         self.rect.x = self.x
+
     def blitme(self):
         """Draw alien on his current position"""
         self.screen.blit(self.image, self.rect)
@@ -32,4 +34,3 @@ class Alien(Sprite):
             return True
         elif self.rect.left <= 0:
             return True
-
