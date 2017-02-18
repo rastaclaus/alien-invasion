@@ -4,18 +4,18 @@
 """alien invasion main module"""
 import pygame
 from pygame.sprite import Group
+
+import game_functions as gf
 from settings import Settings
 from ship import Ship
-from alien import Alien
-from stars import Star
-import game_functions as gf
+
 
 def run_game():
     """Initialise game,  create screen object, and start main loop"""
     pygame.init()
     ai_settings = Settings()
     screen = pygame.display.set_mode((ai_settings.screen_width,
-        ai_settings.screen_height))
+                                      ai_settings.screen_height))
     pygame.display.set_caption("Alien Invasion")
 
     ship = Ship(ai_settings, screen)
@@ -35,5 +35,6 @@ def run_game():
                          aliens,
                          bullets,
                          stars)
+
 
 run_game()
