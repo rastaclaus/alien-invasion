@@ -1,6 +1,7 @@
 # coding=utf-8
 """settings module"""
 
+
 class Settings:
     """Settings storage class"""
 
@@ -11,7 +12,7 @@ class Settings:
         self.bg_color = (20, 20, 100)
         self.ship_speed_factor = 1.5
         # Settings for bullet
-        self.bullet_speed_factor = 1
+        self.bullet_speed_factor = 1.5
         self.bullet_width = 3
         self.bullet_height = 15
         self.bullet_color = 130, 190, 190
