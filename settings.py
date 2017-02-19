@@ -19,6 +19,8 @@ class Settings:
         self.bullets_allowed = 3
         # Settings for aliens
         self.alien_speed_factor = 0.5
-        self.fleet_drop_speed = 20
+        self.fleet_drop_speed = 30
         # fleet_direction = 1 - move right, -1 move left
         self.fleet_direction = 1
+        # game_stats
+        self.ship_limit = 3

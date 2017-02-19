@@ -2,6 +2,7 @@
 """Player ship module"""
 import pygame
 
+
 class Ship():
     """Player ship class"""
     def __init__(self, ai_settings, screen):
@@ -30,3 +31,6 @@ class Ship():
     def blitme(self):
         """Draw ship in current position"""
         self.screen.blit(self.image, self.rect)
+
+    def center_ship(self):
+        self.rect.centerx = self.screen_rect.centerx

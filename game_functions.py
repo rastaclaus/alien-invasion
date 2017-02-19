@@ -2,6 +2,7 @@
 """Game common functions"""
 
 import sys
+from time import sleep
 import pygame
 from bullet import Bullet
 from alien import Alien
@@ -53,12 +54,14 @@ def update_bullets(ai_settings, screen, aliens, bullets):
             bullets.remove(bullet)
     check_bullet_alien_collisions(ai_settings, screen, aliens, bullets)
 
+
 def check_bullet_alien_collisions(ai_settings, screen, aliens, bullets):
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
     if len(aliens) == 0:
         ai_settings.alien_speed_factor *= 1.05
         ai_settings.bullet_speed_factor *= 1.05
         create_fleet(ai_settings, screen, aliens)
+
 
 def fire_bullet(ai_settings, screen, ship, bullets):
     if len(bullets) < ai_settings.bullets_allowed:
@@ -102,9 +105,11 @@ def create_fleet(ai_settings, screen, aliens):
             create_alien(ai_settings, screen, aliens, row_number, alien_number)
 
 
-def update_aliens(ai_settings, aliens):
+def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     check_fleet_edges(ai_settings, aliens)
     aliens.update()
+    if pygame.sprite.spritecollideany(ship, aliens):
+        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
 
 
 def check_fleet_edges(ai_settings, aliens):
@@ -118,3 +123,12 @@ def change_fleet_direction(ai_settings, aliens):
     for alien in aliens.sprites():
         alien.y_dropcount = ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
+
+
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+    stats.ships_remain -= 1
+    aliens.empty()
+    bullets.empty()
+    create_fleet(ai_settings, screen, aliens)
+    ship.center_ship()
+    sleep(0.5)
