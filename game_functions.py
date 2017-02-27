@@ -8,7 +8,8 @@ from bullet import Bullet
 from alien import Alien
 
 
-def check_events(ai_settings, screen, ship, bullets):
+def check_events(ai_settings, aliens,
+                 screen, stats, ship, bullets, play_button):
     """Key press and mouse events processing"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -17,6 +18,23 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keydown_events(event, ai_settings, screen, ship, bullets)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(ai_settings, screen, stats, play_button, ship,
+                              aliens, bullets, mouse_x, mouse_y)
+
+
+def check_play_button(ai_settings, screen, stats, play_button, ship,
+                      aliens, bullets, mouse_x, mouse_y):
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        stats.reset_stat()
+        stats.game_active = True
+
+        aliens.empty()
+        bullets.empty()
+
+        create_fleet(ai_settings, screen, aliens)
+        ship.center_ship()
 
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
@@ -37,13 +55,21 @@ def check_keyup_events(event, ship):
         ship.moving_left = 0
 
 
-def update_screen(ai_settings, screen, ship, aliens, bullets):
+def update_screen(ai_settings,
+                  screen,
+                  stats,
+                  ship,
+                  aliens,
+                  bullets,
+                  play_button):
     """Refresh and draw screen"""
     screen.fill(ai_settings.bg_color)
     for bullet in bullets.sprites():
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+    if not stats.game_active:
+        play_button.draw_button()
     pygame.display.flip()
 
 
@@ -135,12 +161,12 @@ def change_fleet_direction(ai_settings, aliens):
 
 
 def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
-    if stats.ships_left > 0:
+    if stats.ships_remain > 0:
         stats.ships_remain -= 1
         aliens.empty()
         bullets.empty()
         create_fleet(ai_settings, screen, aliens)
         ship.center_ship()
-        sleep(0.5)
+        sleep(1)
     else:
         stats.game_active = False
