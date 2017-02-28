@@ -9,43 +9,43 @@ from alien import Alien
 
 
 def check_events(ai_settings, aliens,
-                 screen, stat, ship, bullets, play_button):
+                 screen, stat, ship, bullets, play_button, sb):
     """Key press and mouse events processing"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             check_keydown_events(event, ai_settings,
-                                 screen, ship, bullets, stat, aliens)
+                                 screen, ship, bullets, stat, aliens, sb)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_play_button(ai_settings, screen, stat, play_button, ship,
-                              aliens, bullets, mouse_x, mouse_y)
+                              aliens, bullets, mouse_x, mouse_y, sb)
 
 
-def game_start(stat, aliens, bullets, ai_settings, screen, ship):
+def game_start(stat, aliens, bullets, ai_settings, screen, ship, sb):
+        ai_settings.initialise_dynamic_settings()
         pygame.mouse.set_visible(False)
         stat.reset_stat()
         stat.game_active = True
-
         aliens.empty()
         bullets.empty()
-
         create_fleet(ai_settings, screen, aliens)
         ship.center_ship()
+        sb.prep_score()
 
 
 def check_play_button(ai_settings, screen, stat, play_button, ship,
-                      aliens, bullets, mouse_x, mouse_y):
+                      aliens, bullets, mouse_x, mouse_y, sb):
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stat.game_active:
-        game_start(stat, aliens, bullets, ai_settings, screen, ship)
+        game_start(stat, aliens, bullets, ai_settings, screen, ship, sb)
 
 
 def check_keydown_events(event, ai_settings,
-                         screen, ship, bullets, stat, aliens):
+                         screen, ship, bullets, stat, aliens, sb):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = 1
     if event.key == pygame.K_LEFT:
@@ -55,7 +55,7 @@ def check_keydown_events(event, ai_settings,
     if event.key == pygame.K_q:
         sys.exit()
     if event.key == pygame.K_p and not stat.game_active:
-        game_start(stat, aliens, bullets, ai_settings, screen, ship)
+        game_start(stat, aliens, bullets, ai_settings, screen, ship, sb)
 
 
 def check_keyup_events(event, ship):
@@ -68,6 +68,7 @@ def check_keyup_events(event, ship):
 def update_screen(ai_settings,
                   screen,
                   stat,
+                  sb,
                   ship,
                   aliens,
                   bullets,
@@ -78,24 +79,30 @@ def update_screen(ai_settings,
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+    sb.show_score()
     if not stat.game_active:
         play_button.draw_button()
     pygame.display.flip()
 
 
-def update_bullets(ai_settings, screen, aliens, bullets):
+def update_bullets(ai_settings, screen, aliens, bullets, stat, sb):
     bullets.update()
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
-    check_bullet_alien_collisions(ai_settings, screen, aliens, bullets)
+    check_bullet_alien_collisions(ai_settings, screen,
+                                  aliens, bullets, stat, sb)
 
 
-def check_bullet_alien_collisions(ai_settings, screen, aliens, bullets):
+def check_bullet_alien_collisions(ai_settings, screen,
+                                  aliens, bullets, stat, sb):
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    if collisions:
+        stat.scores += ai_settings.alien_points * len(collisions.values())
+        sb.prep_score()
+
     if len(aliens) == 0:
-        ai_settings.alien_speed_factor *= 1.05
-        ai_settings.bullet_speed_factor *= 1.05
+        ai_settings.increase_speed()
         create_fleet(ai_settings, screen, aliens)
 
 
@@ -125,7 +132,7 @@ def create_alien(ai_settings, screen, aliens, row_number, alien_number):
     alien_width = alien.rect.width
     alien_height = alien.rect.height
     alien.x = 0.5 * alien_width + 1.5 * alien_width * alien_number
-    alien.y = row_number * alien_height * 2
+    alien.y = 50 + row_number * alien_height * 2
     alien.rect.x = alien.x
     alien.rect.y = alien.y
     aliens.add(alien)
