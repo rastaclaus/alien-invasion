@@ -1,5 +1,3 @@
-# coding=utf-8
-"""Game common functions"""
 
 import sys
 from time import sleep
@@ -25,6 +23,12 @@ def check_events(ai_settings, aliens,
                               aliens, bullets, mouse_x, mouse_y, sb)
 
 
+def sync_high_scores(stat, sb):
+    if stat.scores >= stat.high_scores:
+        stat.high_scores = stat.scores
+        sb.prep_high_score()
+
+
 def game_start(stat, aliens, bullets, ai_settings, screen, ship, sb):
         ai_settings.initialise_dynamic_settings()
         pygame.mouse.set_visible(False)
@@ -35,6 +39,7 @@ def game_start(stat, aliens, bullets, ai_settings, screen, ship, sb):
         create_fleet(ai_settings, screen, aliens)
         ship.center_ship()
         sb.prep_score()
+        sync_high_scores(stat, sb)
 
 
 def check_play_button(ai_settings, screen, stat, play_button, ship,
@@ -100,10 +105,13 @@ def check_bullet_alien_collisions(ai_settings, screen,
     if collisions:
         stat.scores += ai_settings.alien_points * len(collisions.values())
         sb.prep_score()
+        sync_high_scores(stat, sb)
 
     if len(aliens) == 0:
         ai_settings.increase_speed()
         create_fleet(ai_settings, screen, aliens)
+        stat.level += 1
+        sb.prep_score()
 
 
 def fire_bullet(ai_settings, screen, ship, bullets):
