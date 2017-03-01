@@ -1,12 +1,14 @@
 # coding=utf-8
 """Player ship module"""
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship():
+class Ship(Sprite):
     """Player ship class"""
     def __init__(self, ai_settings, screen):
         """Init player ship and his position"""
+        super(Ship, self).__init__()
         self.screen = screen
 
         self.image = pygame.image.load('images/ship.png')

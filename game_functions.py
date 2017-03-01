@@ -40,6 +40,7 @@ def game_start(stat, aliens, bullets, ai_settings, screen, ship, sb):
         ship.center_ship()
         sb.prep_score()
         sync_high_scores(stat, sb)
+        sb.prep_ships()
 
 
 def check_play_button(ai_settings, screen, stat, play_button, ship,
@@ -140,7 +141,7 @@ def create_alien(ai_settings, screen, aliens, row_number, alien_number):
     alien_width = alien.rect.width
     alien_height = alien.rect.height
     alien.x = 0.5 * alien_width + 1.5 * alien_width * alien_number
-    alien.y = 50 + row_number * alien_height * 2
+    alien.y = 60 + row_number * alien_height * 2
     alien.rect.x = alien.x
     alien.rect.y = alien.y
     aliens.add(alien)
@@ -156,20 +157,20 @@ def create_fleet(ai_settings, screen, aliens):
             create_alien(ai_settings, screen, aliens, row_number, alien_number)
 
 
-def check_aliens_bottom(ai_settings, stat, screen, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, stat, screen, ship, aliens, bullets, sb):
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
-            ship_hit(ai_settings, stat, screen, ship, aliens, bullets)
+            ship_hit(ai_settings, stat, screen, ship, aliens, bullets, sb)
             break
 
 
-def update_aliens(ai_settings, stat, screen, ship, aliens, bullets):
+def update_aliens(ai_settings, stat, screen, ship, aliens, bullets, sb):
     check_fleet_edges(ai_settings, aliens)
     aliens.update()
     if pygame.sprite.spritecollideany(ship, aliens):
-        ship_hit(ai_settings, stat, screen, ship, aliens, bullets)
-    check_aliens_bottom(ai_settings, stat, screen, ship, aliens, bullets)
+        ship_hit(ai_settings, stat, screen, ship, aliens, bullets, sb)
+    check_aliens_bottom(ai_settings, stat, screen, ship, aliens, bullets, sb)
 
 
 def check_fleet_edges(ai_settings, aliens):
@@ -185,9 +186,10 @@ def change_fleet_direction(ai_settings, aliens):
     ai_settings.fleet_direction *= -1
 
 
-def ship_hit(ai_settings, stat, screen, ship, aliens, bullets):
+def ship_hit(ai_settings, stat, screen, ship, aliens, bullets, sb):
+    stat.ships_remain -= 1
+    sb.prep_ships()
     if stat.ships_remain > 0:
-        stat.ships_remain -= 1
         aliens.empty()
         bullets.empty()
         create_fleet(ai_settings, screen, aliens)
